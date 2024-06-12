@@ -1,21 +1,26 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "../axios";
 import { useNavigate } from "react-router-dom";
+import { useGlobalHooks } from "../context";
 const LoginPage = () => {
-  const [email, setEmail] = useState("");
+  const [toggleLogin, setToggleLogin] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [errorPop, setErrorPop] = useState(false);
-  const [toggleLogin, setToggleLogin] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const handleLogin = async (event) => {
-    event.preventDefault();
-    setLoading(true);
-    setErrorPop(false);
+  const [email, setEmail] = useState("");
+
+  const {
+    errorPop,
+    handleLogin,
+    handleRegister,
+    errorMessage,
+    loading,
+    setErrorPop,
+    setErrorMessage,
+    setLoading,
+  } = useGlobalHooks();
+
+  const LoginUser = () => {
     if (!email || !password) {
       setErrorPop(true);
       setErrorMessage("Please enter email and password.");
@@ -23,26 +28,11 @@ const LoginPage = () => {
 
       return;
     }
+    handleLogin(email, password);
     setEmail("");
     setPassword("");
-    try {
-      const { data } = await axios.post("/login", { email, password });
-      localStorage.setItem(
-        "user",
-        JSON.stringify({ token: data.token, person: data.user })
-      );
-      setLoading(false);
-      navigate("/chat");
-    } catch (error) {
-      setLoading(false);
-      setErrorPop(true);
-      setErrorMessage(error.response.data.message);
-    }
   };
-  const handleRegister = async (event) => {
-    event.preventDefault();
-    setLoading(true);
-    setErrorPop(false);
+  const RegisterUser = () => {
     if (password !== confirmPassword) {
       setErrorPop(true);
       setErrorMessage("password not match.");
@@ -50,30 +40,8 @@ const LoginPage = () => {
 
       return;
     }
-    setUsername("");
-    setConfirmPassword("");
-    setEmail("");
-    setPassword("");
-    try {
-      const { data } = await axios.post("/register", {
-        username,
-        confirmPassword,
-        email,
-        password,
-      });
-      localStorage.setItem(
-        "user",
-        JSON.stringify({ token: data.token, person: data.user })
-      );
-      setLoading(false);
-      navigate("/chat");
-    } catch (error) {
-      setLoading(false);
-      setErrorPop(true);
-      setErrorMessage(error.response.data.message);
-    }
+    handleRegister(username, confirmPassword, email, password);
   };
-
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="w-3/4 px-5  shadow-2xl flex items-center justify-center">
@@ -167,7 +135,7 @@ const LoginPage = () => {
             <label className=" flex items-center gap-2">
               <button
                 disabled={loading}
-                onClick={handleRegister}
+                onClick={RegisterUser}
                 className="btn btn-primary"
               >
                 {loading ? "Loading.." : "Sign up"}
@@ -177,7 +145,7 @@ const LoginPage = () => {
             <label className=" flex items-center gap-2">
               <button
                 disabled={loading}
-                onClick={handleLogin}
+                onClick={LoginUser}
                 className="btn btn-primary"
               >
                 {loading ? "Loading.." : "Sign In"}

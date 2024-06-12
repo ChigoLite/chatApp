@@ -1,31 +1,27 @@
 import React from "react";
-
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useGlobalHooks } from "../context";
 const Navber = () => {
+  const { user, logout } = useGlobalHooks();
+
   return (
     <>
-      <div className="navbar bg-base-100">
-        <div className="flex-1">
-          <a className="btn btn-ghost text-xl">daisyUI</a>
+      <div className="navbar bg-base-400 flex justify-between">
+        <div className="flex-1 md:flex">
+          <a className="btn btn-ghost text-xl">Chat-Up</a>
         </div>
         <div className="flex-none gap-2">
-          <div className="form-control">
-            <input
-              type="text"
-              placeholder="Search"
-              className="input input-bordered w-24 md:w-auto"
-            />
-          </div>
           <div className="dropdown dropdown-end">
             <div
               tabIndex={0}
               role="button"
               className="btn btn-ghost btn-circle avatar"
             >
-              <div className="w-10 rounded-full">
-                <img
-                  alt="Tailwind CSS Navbar component"
-                  src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
-                />
+              <div className="avatar online">
+                <div className="w-10 rounded-full">
+                  <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                </div>
               </div>
             </div>
             <ul
@@ -41,12 +37,13 @@ const Navber = () => {
               <li>
                 <a>Settings</a>
               </li>
-              <li>
+              <li onClick={logout}>
                 <a>Logout</a>
               </li>
             </ul>
           </div>
         </div>
+        <hr />
       </div>
     </>
   );

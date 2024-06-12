@@ -1,14 +1,15 @@
+import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
-import Home from "./home/homecreen";
-import Room from "./home/room";
-import ChatScreen from "./home/chatScreen";
+const ChatScreen = lazy(() => import("./home/chatScreen"));
+const Home = lazy(() => import("./home/homecreen"));
 const App = () => {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/rooms/:id" element={<Room />} />
-      <Route path="/chat" element={<ChatScreen />} />
-    </Routes>
+    <Suspense fallback="Loading....">
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/chat" element={<ChatScreen />} />
+      </Routes>
+    </Suspense>
   );
 };
 
