@@ -1,5 +1,7 @@
 import React, { useState, useContext, useEffect, createContext } from "react";
 import axios from "axios";
+import io from "socket.io-client";
+
 const AppContext = createContext();
 
 const url = "http://localhost:2020/api/v1";
@@ -9,11 +11,19 @@ const Context = ({ children }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [errorPop, setErrorPop] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState("");
   const [searchedUser, setSearchedUser] = useState([]);
   const [skeleton, setSkeleton] = useState(false);
   const [selectedChat, setSelectedChat] = useState(null);
   const [chatUsers, setChatUsers] = useState([]);
+  const [profile, setProfile] = useState([]);
+  const [chatId, setChatId] = useState("");
+  const [onlineUser, setOnlineUser] = useState([]);
+  const [online, setOnline] = useState(false);
+  const OnlineId = profile?.userProfile?._id;
+  const [unreadCounts, setUnreadCounts] = useState({});
+
+  const endPoint = "http://localhost:2020/";
+  const socket = io(endPoint);
 
   const handleLogin = async (email, password) => {
     setLoading(true);
@@ -71,10 +81,9 @@ const Context = ({ children }) => {
 
   const logout = async () => {
     try {
-      const data = await axios.get(`${url}/logout`, { withCredentilas: true });
+      const data = await axios.get(`${url}/logout`, { withCredentials: true });
       window.location.href = "/";
       localStorage.clear();
-      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -85,10 +94,11 @@ const Context = ({ children }) => {
       const data = await axios.get(`${url}/users?users=${input}`, {
         withCredentials: true,
       });
+      console.log(data);
       if (!data) {
         return;
       }
-      setSearchedUser(data?.data.users);
+      setSearchedUser(data?.data.user);
       setSkeleton(false);
     } catch (error) {
       setSkeleton(false);
@@ -102,12 +112,23 @@ const Context = ({ children }) => {
       if (user) {
         const { isLogin, person } = user;
         setLoggedIn(isLogin);
-        setUser(person);
       }
     };
     isLoggedIn();
   }, []);
 
+  useEffect(() => {
+    const userProfile = async () => {
+      const data = await axios.get(`${url}/profile`, {
+        withCredentials: true,
+      });
+      if (!data) {
+        return;
+      }
+      setProfile(data?.data);
+    };
+    userProfile();
+  }, []);
   useEffect(() => {
     const users = async () => {
       const data = await axios.get(`${url}/chat/getchats`, {
@@ -120,12 +141,18 @@ const Context = ({ children }) => {
     };
     // users();
   }, []);
+  // useEffect(() => {
+  //   const isOnline = onlineUser.find((id) => id == OnlineId);
+  //   if (isOnline) {
+  //     setOnline(isOnline);
+  //   }
+  // }, [onlineUser]);
   return (
     <AppContext.Provider
       value={{
         logout,
         SearchUsers,
-        user,
+        profile,
         loggedIn,
         errorPop,
         handleLogin,
@@ -142,6 +169,12 @@ const Context = ({ children }) => {
         setSelectedChat,
         chatUsers,
         setChatUsers,
+        chatId,
+        setChatId,
+        onlineUser,
+        setOnlineUser,
+        unreadCounts,
+        setUnreadCounts,
       }}
     >
       {children}

@@ -1,15 +1,17 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { useGlobalHooks } from "../context";
+import avater from "../assets/icons8-avatar-50.png";
 const Navber = () => {
-  const { user, logout } = useGlobalHooks();
-
+  const { user, logout, profile } = useGlobalHooks();
   return (
     <>
-      <div className="navbar bg-base-400 flex justify-between">
+      <div className="navbar bg-pink-400 flex justify-between top-0 left-0  fixed shadow-lg z-50">
         <div className="flex-1 md:flex">
-          <a className="btn btn-ghost text-xl">Chat-Up</a>
+          <Link to="/chat">
+            <p className="btn btn-ghost text-xl">Chat-Up</p>
+          </Link>
         </div>
         <div className="flex-none gap-2">
           <div className="dropdown dropdown-end">
@@ -20,7 +22,11 @@ const Navber = () => {
             >
               <div className="avatar online">
                 <div className="w-10 rounded-full">
-                  <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                  {profile?.userProfile?.image ? (
+                    <img src={profile?.userProfile.image} />
+                  ) : (
+                    <img src={avater} alt="avater" />
+                  )}
                 </div>
               </div>
             </div>
@@ -29,10 +35,13 @@ const Navber = () => {
               className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
             >
               <li>
-                <a className="justify-between">
+                <Link
+                  to={`/profile/${profile?.userProfile?._id}`}
+                  className="justify-between"
+                >
                   Profile
                   <span className="badge">New</span>
-                </a>
+                </Link>
               </li>
               <li>
                 <a>Settings</a>

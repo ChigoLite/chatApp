@@ -4,7 +4,12 @@ import { useGlobalHooks } from "../context";
 import ChatScreen from "./chatScreen";
 const Home = () => {
   const { loggedIn } = useGlobalHooks();
-  return <div>{!loggedIn ? <LoginPage /> : <ChatScreen />}</div>;
+  return (
+    <div className="h-screen overflow-hidden">
+      {" "}
+      {!loggedIn ? <LoginPage /> : <ChatScreen />}
+    </div>
+  );
 };
 
 export default Home;

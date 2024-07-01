@@ -6,3 +6,10 @@ body {
   box-sizing: border-box;
   margin: 0;
 }
+.unread-count {
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 0.2em 0.5em;
+  margin-left: 0.5em;
+}

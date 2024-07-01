@@ -3,6 +3,7 @@ import { useGlobalHooks } from "../context";
 import Chat from "../chats/ChatPage";
 import axios from "axios";
 const url = "http://localhost:2020/api/v1/chat";
+import avater from "../assets/icons8-avatar-50.png";
 
 const SearchUsers = () => {
   const {
@@ -55,30 +56,64 @@ const SearchUsers = () => {
   }, [input]);
   const debounce = useMemo(() => handleSearch(), []);
   return (
-    <div>
+    <div className=" mt-16 h-full">
       <div>
-        <input
-          onChange={debounce}
-          value={input}
-          type="text"
-          placeholder="search user"
-          className="input input-bordered w-60 mt-0.5 max-w-xs"
-        />
+        <label className="input input-bordered flex items-center gap-2">
+          <input
+            onChange={debounce}
+            value={input}
+            type="text"
+            placeholder="Search user"
+            className="grow"
+          />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 16 16"
+            fill="currentColor"
+            className="w-6 h-5 opacity-70"
+          >
+            <path
+              fillRule="evenodd"
+              d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </label>
       </div>
       {toggleSearch && (
-        <div className="card w-96 bg-base-100 shadow-xl m-8 h-96 overflow-scroll">
+        <div className=" w-96 bg-base-100 shadow-xl mt-9 h-screen overflow-scroll">
           {searchedUser?.map((users) => {
             return (
-              <div className="card-body " key={users._id}>
-                <div className="card-actions">
+              <div className=" mt-5" key={users._id}>
+                <div className="">
                   {skeleton ? (
                     <div className="skeleton h-12 w-full"></div>
                   ) : (
                     <div
-                      className="btn  rounded w-full bg-pink-50 h-8"
+                      className="btn flex justify-between w-full bg-pink-50 h-8"
                       onClick={() => accessChat(users._id)}
                     >
-                      <h3 className=" mx-4 capitalize">{users.username}</h3>
+                      <div className="">
+                        <h3 className="  capitalize">{users.username}</h3>
+                        <span className="text-opacity-20 text-sm text-gray-950">
+                          {users.email}
+                        </span>
+                      </div>
+                      <div className="">
+                        {users.image ? (
+                          <img
+                            className="w-8 h-8 object-contain"
+                            src={users.image}
+                            alt={users.name}
+                          />
+                        ) : (
+                          <img
+                            className="w-8 h-8 object-contain"
+                            src={avater}
+                            alt={users.profile}
+                          />
+                        )}
+                      </div>
                     </div>
                   )}
                 </div>
