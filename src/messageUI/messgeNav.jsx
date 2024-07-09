@@ -28,7 +28,9 @@ const MessgeScreen = () => {
   const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState("");
-
+  const [typing, setTyping] = useState(false);
+  const [typingTimeout, setTypingTimeout] = useState(null);
+  const [connection, setConnection] = useState(false);
   const userId = profile?.userProfile?._id;
   const fetchMessage = async () => {
     if (!selectedChat) return;
@@ -97,6 +99,8 @@ const MessgeScreen = () => {
 
     const setupSocket = () => {
       socket.emit("onlineUsers", userId);
+      socket.on("connection", () => setConnection(true));
+      // socket.emit("join_chat", selectedChat);
 
       // Listener for received messages
       socket.on("recievedMessage", (message, chat_id) => {
@@ -163,8 +167,9 @@ const MessgeScreen = () => {
     // Re-join room on reconnect
     socket.on("reconnect", () => {
       console.log("Reconnected, joining room again for userId:", userId);
-      socket.emit("join_chat", userId);
+      // socket.emit("join_chat", selectedChat);
       socket.emit("user", profile?.userProfile);
+      socket.on("connection", () => setConnection(true));
     });
 
     // Cleanup function
@@ -193,6 +198,45 @@ const MessgeScreen = () => {
     }
   }, [selectedChat]);
 
+  useEffect(() => {
+    socket.on("typingnow", () => {
+      console.log(typing);
+      setTyping(true);
+    });
+    socket.on("stop_typing", () => setTyping(false));
+
+    socket.on("reconnect", () => {
+      socket.on("typingnow", () => {
+        console.log(typing);
+        setTyping(true);
+      });
+    });
+    return () => {
+      socket.off("typingnow");
+      socket.off("stop_typing");
+      socket.off("reconnect");
+    };
+  }, []);
+
+  const typingHandler = (e) => {
+    setMessageInput(e.target.value);
+    if (!connection) return;
+
+    // setTyping(true);
+    socket.emit("typing", selectedChat, userId);
+
+    if (typingTimeout) {
+      clearTimeout(typingTimeout);
+    }
+
+    const timeout = setTimeout(() => {
+      socket.emit("stop typing", selectedChat, userId);
+      setTyping(false);
+    }, 3000);
+
+    setTypingTimeout(timeout);
+  };
+
   if (loading) {
     return (
       <div className="">
@@ -215,7 +259,7 @@ const MessgeScreen = () => {
 
   return (
     <div className="relative">
-      <div className="navbar bg-base-100 mt-16">
+      <div className="navbar bg-base-100 mt-16 fixed top-0">
         <div className="flex-1 ">
           <div className="avatar">
             <Link
@@ -288,15 +332,25 @@ const MessgeScreen = () => {
       <div>
         {messages.map((message, index) => {
           return (
-            <MessageUi index={index} messages={message} key={message._id} />
+            <MessageUi
+              index={index}
+              messages={message}
+              key={message._id}
+              typing={typing}
+            />
           );
         })}
       </div>
       <div className=" my-10">
+        {typing && (
+          <div className="ml-4">
+            <span className="loading loading-dots loading-lg"></span>
+          </div>
+        )}
         <div className="flex w-full max-w-3xl  space-x-1 fixed bottom-2 right-2">
           <input
             value={messageInput}
-            onChange={(e) => setMessageInput(e.target.value)}
+            onChange={typingHandler}
             onKeyPress={handlePress}
             type="text"
             placeholder="Type a message..."

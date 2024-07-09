@@ -6,18 +6,67 @@ const url = "http://localhost:2020/api/v1";
 import axios from "axios";
 import Navber from "./navbar";
 import { useParams } from "react-router-dom";
+import Loading from "../loader/Loading";
+import ProfileModal from "./profileModal";
+import "./home.css";
 const UserProfile = () => {
+  const { profile } = useGlobalHooks();
   const [loading, setLoading] = useState(false);
-  const [profile, setProfile] = useState([]);
+  const [loadingImage, setLoadingImage] = useState(false);
+  const [profileFetched, setProfileFetched] = useState([]);
+  const [image, setImage] = useState([]);
+  const [profileImage, setProfileImage] = useState([]);
+  const [toggle, setToggle] = useState(false);
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      setFileToBase(file);
+      setProfileImage(file);
+    }
+  };
+
+  const setFileToBase = (file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      setImage(reader.result);
+      setToggle(true);
+    };
+  };
   const { id } = useParams();
+
+  const uploadImage = async () => {
+    setLoadingImage(true);
+    try {
+      const formData = new FormData();
+      formData.append("image", profileImage);
+      const { data } = await axios.post(`${url}/profile_pics`, formData, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      if (data.success === true) {
+        setToggle(false);
+      }
+      console.log(profileFetched);
+      setLoadingImage(false);
+      window.location.reload();
+    } catch (error) {
+      setLoadingImage(false);
+      console.log(error);
+    }
+  };
   useEffect(() => {
     const User = async () => {
       setLoading(true);
+
       try {
         const { data } = await axios.get(`${url}/${id}/user_profile`, {
           withCredentials: true,
         });
-        setProfile(data);
+        setProfileFetched(data);
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -31,32 +80,58 @@ const UserProfile = () => {
   return (
     <>
       <Navber />
-
-      <div className="max-w-md mx-auto bg-white shadow-lg rounded-lg overflow-hidden my-10">
-        <div className="bg-cover bg-center h-20 p-4"></div>
-        <div className="p-4">
-          <div className="flex justify-center items-center -mt-16">
-            <img
-              className="w-32 h-32 object-cover rounded-full border-4 border-white"
-              src={profile?.profile?.image ? profile?.profile?.image : avater}
-              alt="User Avatar"
-            />
+      {loading ? (
+        <Loading />
+      ) : (
+        <div className="max-w-md mx-auto bg-white shadow-lg rounded-lg overflow-hidden my-10">
+          <div className="bg-cover bg-center h-20 p-4"></div>
+          <div className="p-4">
+            <div className="flex justify-center items-center -mt-16">
+              <img
+                src={
+                  profileFetched?.profile?.image
+                    ? profileFetched?.profile?.image
+                    : avater
+                }
+                className="w-32 h-32 object-cover rounded-full border-4 border-white"
+                alt="User Avatar"
+              />
+            </div>
+            <div>
+              <input
+                type="file"
+                id="imageUpload"
+                accept=".png, .jpg, .jpeg"
+                onChange={handleImageUpload}
+              />
+            </div>
+            <div className="text-center mt-4">
+              {profile?.userProfile?._id == id && (
+                <label htmlFor="imageUpload" className="upload-button">
+                  Choose Image
+                </label>
+              )}
+              <h2 className="text-2xl font-semibold mt-2 text-gray-800">
+                {profileFetched?.profile?.username}
+              </h2>
+              <p className="text-gray-600">{profileFetched?.profile?.email}</p>
+            </div>
           </div>
-          <div className="text-center mt-2">
-            <h2 className="text-2xl font-semibold text-gray-800">
-              {profile?.profile?.username}
-            </h2>
-            <p className="text-gray-600">{profile?.profile?.email}</p>
+          <div className="p-4 border-t mt-4">
+            <h3 className="text-lg font-semibold text-gray-700">Bio</h3>
+            <p className="text-gray-600 text-sm mt-2">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris
+              ipsum sit nibh amet egestas tellus.
+            </p>
           </div>
+          <ProfileModal
+            image={image}
+            uploadImage={uploadImage}
+            loading={loadingImage}
+            toggle={toggle}
+          />
         </div>
-        <div className="p-4 border-t mt-4">
-          <h3 className="text-lg font-semibold text-gray-700">Bio</h3>
-          <p className="text-gray-600 text-sm mt-2">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris
-            ipsum sit nibh amet egestas tellus.
-          </p>
-        </div>
-      </div>
+      )}
     </>
   );
 };

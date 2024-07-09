@@ -17,9 +17,9 @@ const MessageUi = ({ messages, index }) => {
   return (
     <div className=" flex flex-col p-4 space-y-2 overflow-auto mt-12">
       <div
-        className={`p-2   max-w-xs ${
+        className={`p-2   max-w-sm ${
           sender?._id === `${profile?.userProfile._id}`
-            ? "bg-blue-700 text-white  self-end rounded-l-lg rounded-br-lg"
+            ? "bg-blue-700 text-white  self-end rounded-l-lg rounded-br-lg overflow-hidden"
             : "bg-gray-200 text-black self-start rounded-r-lg rounded-bl-lg"
         }`}
         ref={index === messages.length - 1 ? messageScroll : null}

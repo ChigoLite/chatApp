@@ -89,7 +89,7 @@ const Chats = ({ value }) => {
                         : "offline"
                     }`}
                   >
-                    <div className="  rounded-full w-6">
+                    <div className="  rounded-full w-9">
                       {fullUserDetails?.image ? (
                         <img
                           className="w-8 h-8 object-contain"
@@ -98,7 +98,7 @@ const Chats = ({ value }) => {
                         />
                       ) : (
                         <img
-                          className="object-cover w-2 h-2"
+                          className="object-cover w-9 h-2"
                           src={avater}
                           alt={fullUserDetails.username}
                         />
@@ -107,15 +107,15 @@ const Chats = ({ value }) => {
                   </div>
                 </div>
                 <div className="absolute bottom-2 left-4">
-                  <span>
+                  <span className="text-gray-800 font-extralight ">
                     {user?.ltMessage?.sender
                       ? user?.ltMessage.sender._id === profile?.userProfile?._id
-                        ? `you:  ${user?.ltMessage.content}`
-                        : user.ltMessage.content
+                        ? `you:  ${user?.ltMessage.content.substring(0, 15)}`
+                        : user.ltMessage.content.substring(0, 15)
                       : user?.latestMessage?.sender ===
                         profile?.userProfile?._id
-                      ? `you:  ${user?.latestMessage?.content}`
-                      : user.latestMessage?.content}
+                      ? `you:  ${user?.latestMessage?.content.substring(0, 15)}`
+                      : user.latestMessage?.content.substring(0, 15)}
                   </span>
                   {unreadCounts[user._id] > 0 && (
                     <span className="unread-count">
