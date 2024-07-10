@@ -8,8 +8,8 @@ import MessageUi from "./MessageUi";
 import io from "socket.io-client";
 import Loading from "../loader/Loading";
 import { Link } from "react-router-dom";
-const url = "http://localhost:2020/api/v1";
-const endPoint = "http://localhost:2020/";
+const url = "https://chat-up-y7ix.onrender.com/api/v1";
+const endPoint = "https://chat-up-y7ix.onrender.com/";
 const socket = io(endPoint);
 let copyOfSelectedChat;
 

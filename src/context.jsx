@@ -4,7 +4,7 @@ import io from "socket.io-client";
 
 const AppContext = createContext();
 
-const url = "http://localhost:2020/api/v1";
+const url = "https://chat-up-y7ix.onrender.com/api/v1";
 const Context = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
 
@@ -22,7 +22,7 @@ const Context = ({ children }) => {
   const OnlineId = profile?.userProfile?._id;
   const [unreadCounts, setUnreadCounts] = useState({});
 
-  const endPoint = "http://localhost:2020/";
+  const endPoint = "https://chat-up-y7ix.onrender.com/";
   const socket = io(endPoint);
 
   const handleLogin = async (email, password) => {

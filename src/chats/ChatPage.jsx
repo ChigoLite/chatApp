@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useGlobalHooks } from "../context";
-const url = "http://localhost:2020/api/v1/chat";
+const url = "https://chat-up-y7ix.onrender.com/api/v1/chat";
 import { sender, SenderFullDetails, senderId } from "../utils/config";
 import Loading from "../loader/Loading";
 import avater from "../assets/icons8-avatar-50.png";

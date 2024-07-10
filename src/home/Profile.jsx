@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useGlobalHooks } from "../context";
 import avater from "../assets/icons8-avatar-50.png";
-const url = "http://localhost:2020/api/v1";
+const url = "https://chat-up-y7ix.onrender.com/api/v1";
 import axios from "axios";
 import Navber from "./navbar";
 import { useParams } from "react-router-dom";

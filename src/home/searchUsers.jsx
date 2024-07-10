@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useMemo } from "react";
 import { useGlobalHooks } from "../context";
 import Chat from "../chats/ChatPage";
 import axios from "axios";
-const url = "http://localhost:2020/api/v1/chat";
+const url = "https://chat-up-y7ix.onrender.com/api/v1/chat";
 import avater from "../assets/icons8-avatar-50.png";
 
 const SearchUsers = () => {
