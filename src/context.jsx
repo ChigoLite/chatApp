@@ -85,7 +85,7 @@ const Context = ({ children }) => {
   const logout = async () => {
     try {
       const data = await axios.get(`${url}/logout`, { withCredentials: true });
-      window.location.href = "/";
+      window.location.href = "/login";
       localStorage.clear();
     } catch (error) {
       console.log(error);

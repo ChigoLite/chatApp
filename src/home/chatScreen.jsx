@@ -10,7 +10,7 @@ const ChatScreen = () => {
   const navigate = useNavigate();
   useEffect(() => {
     if (!loggedIn) {
-      navigate("/");
+      navigate("/login");
     }
   }, []);
   return (
