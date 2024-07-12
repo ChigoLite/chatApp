@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useGlobalHooks } from "../context";
-const url = "https://chat-up-y7ix.onrender.com/api/v1/chat";
 import { sender, SenderFullDetails, senderId } from "../utils/config";
 import Loading from "../loader/Loading";
 import avater from "../assets/icons8-avatar-50.png";
@@ -17,13 +16,14 @@ const Chats = ({ value }) => {
     connection,
     onlineUser,
     unreadCounts,
+    url,
   } = useGlobalHooks();
 
   useEffect(() => {
     const fetchUsers = async () => {
       setLoading(true);
       try {
-        const { data } = await axios.get(`${url}/getchats`, {
+        const { data } = await axios.get(`${url}/chat/getchats`, {
           withCredentials: true,
         });
 

@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { useGlobalHooks } from "../context";
 import avater from "../assets/icons8-avatar-50.png";
-const url = "https://chat-up-y7ix.onrender.com/api/v1";
 import axios from "axios";
 import Navber from "./navbar";
 import { useParams } from "react-router-dom";
@@ -10,7 +9,7 @@ import Loading from "../loader/Loading";
 import ProfileModal from "./profileModal";
 import "./home.css";
 const UserProfile = () => {
-  const { profile } = useGlobalHooks();
+  const { profile, url } = useGlobalHooks();
   const [loading, setLoading] = useState(false);
   const [loadingImage, setLoadingImage] = useState(false);
   const [profileFetched, setProfileFetched] = useState([]);

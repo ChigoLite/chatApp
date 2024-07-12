@@ -8,8 +8,9 @@ import MessageUi from "./MessageUi";
 import io from "socket.io-client";
 import Loading from "../loader/Loading";
 import { Link } from "react-router-dom";
-const url = "https://chat-up-y7ix.onrender.com/api/v1";
 const endPoint = "https://chat-up-y7ix.onrender.com/";
+// const endPoint = "http://localhost:5173/";
+
 const socket = io(endPoint);
 let copyOfSelectedChat;
 
@@ -24,6 +25,7 @@ const MessgeScreen = () => {
     setUnreadCounts,
     setChatUsers,
     chatUsers,
+    url,
   } = useGlobalHooks();
   const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState([]);

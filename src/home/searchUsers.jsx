@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState, useMemo } from "react";
 import { useGlobalHooks } from "../context";
 import Chat from "../chats/ChatPage";
 import axios from "axios";
-const url = "https://chat-up-y7ix.onrender.com/api/v1/chat";
 import avater from "../assets/icons8-avatar-50.png";
 
 const SearchUsers = () => {
@@ -14,13 +13,14 @@ const SearchUsers = () => {
     setSelectedChat,
     setChatUsers,
     chatUsers,
+    url,
   } = useGlobalHooks();
   const [input, setInput] = useState("");
   const [toggleSearch, setToggleSearch] = useState(false);
   const accessChat = async (userId) => {
     try {
       const { data } = await axios.post(
-        `${url}`,
+        `${url}/chat`,
         { userId },
         { withCredentials: true }
       );

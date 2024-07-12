@@ -5,6 +5,8 @@ import io from "socket.io-client";
 const AppContext = createContext();
 
 const url = "https://chat-up-y7ix.onrender.com/api/v1";
+// const url = "http://localhost:2020/api/v1";
+
 const Context = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
 
@@ -23,6 +25,7 @@ const Context = ({ children }) => {
   const [unreadCounts, setUnreadCounts] = useState({});
 
   const endPoint = "https://chat-up-y7ix.onrender.com/";
+  // const endPoint = "http://localhost:5173/";
   const socket = io(endPoint);
 
   const handleLogin = async (email, password) => {
@@ -40,7 +43,7 @@ const Context = ({ children }) => {
         JSON.stringify({ person: data.user, isLogin: true })
       );
       setLoading(false);
-      window.location.href = "/chat";
+      window.location.href = "/";
     } catch (error) {
       setLoading(false);
       setErrorPop(true);
@@ -69,7 +72,7 @@ const Context = ({ children }) => {
       );
 
       setLoading(false);
-      window.location.href = "/chat";
+      window.location.href = "/";
     } catch (error) {
       console.log(error);
       setLoading(false);
@@ -175,6 +178,8 @@ const Context = ({ children }) => {
         setOnlineUser,
         unreadCounts,
         setUnreadCounts,
+        url,
+        endPoint,
       }}
     >
       {children}
