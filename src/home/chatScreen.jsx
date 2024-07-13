@@ -9,6 +9,7 @@ const ChatScreen = () => {
   const { loggedIn, selectedChat } = useGlobalHooks();
   const navigate = useNavigate();
   useEffect(() => {
+    console.log(loggedIn);
     if (!loggedIn) {
       navigate("/login");
     }

@@ -14,10 +14,13 @@ const SearchUsers = () => {
     setChatUsers,
     chatUsers,
     url,
+    msgLoading,
+    setMsgLoading,
   } = useGlobalHooks();
   const [input, setInput] = useState("");
   const [toggleSearch, setToggleSearch] = useState(false);
   const accessChat = async (userId) => {
+    setMsgLoading(true);
     try {
       const { data } = await axios.post(
         `${url}/chat`,
@@ -28,9 +31,11 @@ const SearchUsers = () => {
         setChatUsers([data, ...chatUsers]);
         setToggleSearch(false);
         setSelectedChat(data);
+        setMsgLoading(false);
         setInput("");
       }
     } catch (error) {
+      setMsgLoading(false);
       console.log(error);
     }
   };
@@ -95,7 +100,7 @@ const SearchUsers = () => {
                     >
                       <div className="">
                         <h3 className="  capitalize">{users.username}</h3>
-                        <span className="text-opacity-20 text-sm text-gray-950">
+                        <span className=" text-sm text-gray-950">
                           {users.email}
                         </span>
                       </div>

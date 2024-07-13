@@ -10,7 +10,7 @@ const Navber = () => {
     <>
       <div className="navbar bg-pink-400 flex justify-between top-0 left-0  fixed shadow-lg z-50">
         <div className="flex-1 md:flex">
-          <Link to="/chat">
+          <Link to="/">
             <p className="btn btn-ghost text-xl">Chat-Up</p>
           </Link>
         </div>
@@ -47,11 +47,7 @@ const Navber = () => {
               <li>
                 <a>Settings</a>
               </li>
-              <li
-                onClick={() => {
-                  logout(), navigate("/login");
-                }}
-              >
+              <li onClick={logout}>
                 <a>Logout</a>
               </li>
             </ul>

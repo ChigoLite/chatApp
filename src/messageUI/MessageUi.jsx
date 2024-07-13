@@ -15,7 +15,7 @@ const MessageUi = ({ messages, index }) => {
     }
   }, [messages]);
   return (
-    <div className=" flex flex-col p-4 space-y-2 overflow-auto mt-12">
+    <div className=" flex flex-col p-4 space-y-2 overflow-auto ">
       <div
         className={`p-2   max-w-sm ${
           sender?._id === `${profile?.userProfile._id}`

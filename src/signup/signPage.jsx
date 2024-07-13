@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useGlobalHooks } from "../context";
@@ -8,7 +8,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
   const {
     errorPop,
     handleLogin,
@@ -18,6 +18,7 @@ const LoginPage = () => {
     setErrorPop,
     setErrorMessage,
     setLoading,
+    loggedIn,
   } = useGlobalHooks();
 
   const LoginUser = () => {
@@ -29,7 +30,6 @@ const LoginPage = () => {
       return;
     }
     handleLogin(email, password);
-    Navigate("/");
   };
   const RegisterUser = () => {
     if (password !== confirmPassword) {
@@ -40,7 +40,6 @@ const LoginPage = () => {
       return;
     }
     handleRegister(username, confirmPassword, email, password);
-    Navigate("/");
   };
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">

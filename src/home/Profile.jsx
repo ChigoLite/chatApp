@@ -16,12 +16,14 @@ const UserProfile = () => {
   const [image, setImage] = useState([]);
   const [profileImage, setProfileImage] = useState([]);
   const [toggle, setToggle] = useState(false);
+
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
 
     if (file) {
       setFileToBase(file);
       setProfileImage(file);
+      setToggle(true);
     }
   };
 
@@ -30,7 +32,6 @@ const UserProfile = () => {
     reader.readAsDataURL(file);
     reader.onload = () => {
       setImage(reader.result);
-      setToggle(true);
     };
   };
   const { id } = useParams();
@@ -46,12 +47,15 @@ const UserProfile = () => {
           "Content-Type": "multipart/form-data",
         },
       });
+
       if (data.success === true) {
         setToggle(false);
+        setProfileFetched((prev) => ({
+          ...prev,
+          profile: { ...prev.profile, image: data.upload.image },
+        }));
       }
-      console.log(profileFetched);
       setLoadingImage(false);
-      window.location.reload();
     } catch (error) {
       setLoadingImage(false);
       console.log(error);
@@ -110,10 +114,12 @@ const UserProfile = () => {
                   Choose Image
                 </label>
               )}
-              <h2 className="text-2xl font-semibold mt-2 text-gray-800">
+              <h2 className="text-2xl font-semibold mt-4 text-gray-800">
                 {profileFetched?.profile?.username}
               </h2>
-              <p className="text-gray-600">{profileFetched?.profile?.email}</p>
+              <p className="text-gray-600 mt-3">
+                {profileFetched?.profile?.email}
+              </p>
             </div>
           </div>
           <div className="p-4 border-t mt-4">
@@ -123,12 +129,14 @@ const UserProfile = () => {
               ipsum sit nibh amet egestas tellus.
             </p>
           </div>
-          <ProfileModal
-            image={image}
-            uploadImage={uploadImage}
-            loading={loadingImage}
-            toggle={toggle}
-          />
+          {toggle ? (
+            <ProfileModal
+              image={image}
+              uploadImage={uploadImage}
+              loading={loadingImage}
+              toggle={toggle}
+            />
+          ) : null}
         </div>
       )}
     </>

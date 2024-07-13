@@ -25,9 +25,10 @@ const MessgeScreen = () => {
     setUnreadCounts,
     setChatUsers,
     chatUsers,
+    msgLoading,
+    setMsgLoading,
     url,
   } = useGlobalHooks();
-  const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState("");
   const [typing, setTyping] = useState(false);
@@ -36,16 +37,16 @@ const MessgeScreen = () => {
   const userId = profile?.userProfile?._id;
   const fetchMessage = async () => {
     if (!selectedChat) return;
-    setLoading(true);
+    setMsgLoading(true);
     try {
       const { data } = await axios.get(`${url}/message/${chatId}`, {
         withCredentials: true,
       });
       setMessages(data.messages);
 
-      setLoading(false);
+      setMsgLoading(false);
     } catch (error) {
-      setLoading(false);
+      setMsgLoading(false);
 
       console.error(error);
     }
@@ -239,7 +240,7 @@ const MessgeScreen = () => {
     setTypingTimeout(timeout);
   };
 
-  if (loading) {
+  if (msgLoading) {
     return (
       <div className="">
         <Loading />
@@ -326,12 +327,12 @@ const MessgeScreen = () => {
           back
         </button>
       </div>
-      <div className="flex align-middle justify-center w-24  absolute left-2/4 top-20 bg-white">
+      <div className="flex align-middle justify-center w-24  absolute left-2/4 top-15 bg-white">
         <p className="align-middle text-center text-lg text-pink-400 ">
           Messages
         </p>
       </div>
-      <div>
+      <div className="mt-32">
         {messages.map((message, index) => {
           return (
             <MessageUi

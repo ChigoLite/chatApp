@@ -13,7 +13,7 @@ const ProfileModal = ({ image, uploadImage, loading, toggle }) => {
       >
         open modal
       </button> */}
-      {toggle && document.getElementById("my_modal_3").showModal()}
+      {toggle && document.getElementById("my_modal_3")?.showModal()}
       <dialog id="my_modal_3" className="modal">
         <div className="modal-box">
           <form method="dialog">

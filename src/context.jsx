@@ -1,6 +1,8 @@
 import React, { useState, useContext, useEffect, createContext } from "react";
 import axios from "axios";
 import io from "socket.io-client";
+import { useNavigate } from "react-router-dom";
+import "./axios";
 
 const AppContext = createContext();
 
@@ -9,7 +11,7 @@ const url = "https://chat-up-y7ix.onrender.com/api/v1";
 
 const Context = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
-
+  const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
   const [errorPop, setErrorPop] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -22,10 +24,12 @@ const Context = ({ children }) => {
   const [onlineUser, setOnlineUser] = useState([]);
   const [online, setOnline] = useState(false);
   const OnlineId = profile?.userProfile?._id;
+  const [msgLoading, setMsgLoading] = useState(false);
+
   const [unreadCounts, setUnreadCounts] = useState({});
 
-  const endPoint = "https://chat-up-y7ix.onrender.com/";
-  // const endPoint = "http://localhost:5173/";
+  // const endPoint = "https://chat-up-y7ix.onrender.com/";
+  const endPoint = "http://localhost:5173/";
   const socket = io(endPoint);
 
   const handleLogin = async (email, password) => {
@@ -40,8 +44,10 @@ const Context = ({ children }) => {
       );
       localStorage.setItem(
         "user",
-        JSON.stringify({ person: data.user, isLogin: true })
+        JSON.stringify({ person: data.user, isLogin: true, token: data.token })
       );
+      window.location.href = "/";
+
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -67,8 +73,9 @@ const Context = ({ children }) => {
       );
       localStorage.setItem(
         "user",
-        JSON.stringify({ person: data.user, isLogin: true })
+        JSON.stringify({ person: data.user, isLogin: true, token: data.token })
       );
+      window.location.href = "/";
 
       setLoading(false);
     } catch (error) {
@@ -81,12 +88,8 @@ const Context = ({ children }) => {
   };
 
   const logout = async () => {
-    try {
-      const data = await axios.get(`${url}/logout`, { withCredentials: true });
-      localStorage.clear();
-    } catch (error) {
-      console.log(error);
-    }
+    localStorage.clear();
+    navigate("/login");
   };
   const SearchUsers = async (input) => {
     try {
@@ -141,12 +144,7 @@ const Context = ({ children }) => {
     };
     // users();
   }, []);
-  // useEffect(() => {
-  //   const isOnline = onlineUser.find((id) => id == OnlineId);
-  //   if (isOnline) {
-  //     setOnline(isOnline);
-  //   }
-  // }, [onlineUser]);
+
   return (
     <AppContext.Provider
       value={{
@@ -177,6 +175,8 @@ const Context = ({ children }) => {
         setUnreadCounts,
         url,
         endPoint,
+        msgLoading,
+        setMsgLoading,
       }}
     >
       {children}
