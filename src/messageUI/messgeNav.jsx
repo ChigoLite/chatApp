@@ -62,6 +62,8 @@ const MessgeScreen = () => {
         { withCredentials: true }
       );
       socket.emit("newMessage", data, selectedChat._id);
+      setMessageInput("");
+
       setMessages((prevmessages) => [...prevmessages, data.message]);
       setChatUsers((prevChats) => {
         const updatedChats = prevChats.map((chat) => {
@@ -87,14 +89,9 @@ const MessgeScreen = () => {
 
         return chatsWithLatestMessages;
       });
-      setMessageInput("");
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const handlePress = (e) => {
-    if (e.key === "Enter") sendMessage();
   };
 
   useEffect(() => {
@@ -210,7 +207,6 @@ const MessgeScreen = () => {
 
     socket.on("reconnect", () => {
       socket.on("typingnow", () => {
-        console.log(typing);
         setTyping(true);
       });
     });
@@ -303,23 +299,7 @@ const MessgeScreen = () => {
             {sender(profile.userProfile, selectedChat?.users)}
           </p>
         </div>
-        <div className="flex-none">
-          <button className="btn btn-square btn-ghost">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              className="inline-block w-5 h-5 stroke-current"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
-              ></path>
-            </svg>
-          </button>
-        </div>
+        <div className="flex-none"></div>
         <button
           onClick={() => setSelectedChat(null)}
           className="btn btn-square md:hidden"
@@ -327,11 +307,7 @@ const MessgeScreen = () => {
           back
         </button>
       </div>
-      <div className="flex align-middle justify-center w-24  absolute left-2/4 top-15 bg-white">
-        <p className="align-middle text-center text-lg text-pink-400 ">
-          Messages
-        </p>
-      </div>
+
       <div className="mt-32">
         {messages.map((message, index) => {
           return (
@@ -347,17 +323,16 @@ const MessgeScreen = () => {
       <div className=" my-10">
         {typing && (
           <div className="ml-4">
-            <span className="loading loading-dots loading-lg"></span>
+            <span className="loading loading-dots loading-sm"></span>
           </div>
         )}
         <div className="flex w-full max-w-3xl  space-x-1 fixed bottom-2 right-2">
           <input
             value={messageInput}
             onChange={typingHandler}
-            onKeyPress={handlePress}
             type="text"
             placeholder="Type a message..."
-            className="flex-grow p-2 border border-gray-300 rounded-lg focus:outline-none"
+            className="flex-grow p-2 border border-gray-300 rounded-lg ml-4 focus:outline-none"
           />
           <button
             onClick={sendMessage}
