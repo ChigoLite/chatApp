@@ -43,7 +43,6 @@ const Context = ({ children }) => {
         JSON.stringify({ person: data.user, isLogin: true })
       );
       setLoading(false);
-      window.location.href = "/";
     } catch (error) {
       setLoading(false);
       setErrorPop(true);
@@ -72,7 +71,6 @@ const Context = ({ children }) => {
       );
 
       setLoading(false);
-      window.location.href = "/";
     } catch (error) {
       console.log(error);
       setLoading(false);

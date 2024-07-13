@@ -8,7 +8,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
-
+  const Navigate = useNavigate();
   const {
     errorPop,
     handleLogin,
@@ -29,8 +29,7 @@ const LoginPage = () => {
       return;
     }
     handleLogin(email, password);
-    setEmail("");
-    setPassword("");
+    Navigate("/");
   };
   const RegisterUser = () => {
     if (password !== confirmPassword) {
@@ -41,6 +40,7 @@ const LoginPage = () => {
       return;
     }
     handleRegister(username, confirmPassword, email, password);
+    Navigate("/");
   };
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
