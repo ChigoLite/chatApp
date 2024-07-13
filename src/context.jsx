@@ -4,8 +4,8 @@ import io from "socket.io-client";
 
 const AppContext = createContext();
 
-const url = "https://chat-up-y7ix.onrender.com/api/v1";
-// const url = "http://localhost:2020/api/v1";
+// const url = "https://chat-up-y7ix.onrender.com/api/v1";
+const url = "http://localhost:2020/api/v1";
 
 const Context = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -85,7 +85,6 @@ const Context = ({ children }) => {
   const logout = async () => {
     try {
       const data = await axios.get(`${url}/logout`, { withCredentials: true });
-      window.location.href = "/login";
       localStorage.clear();
     } catch (error) {
       console.log(error);

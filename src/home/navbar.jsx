@@ -1,10 +1,11 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useGlobalHooks } from "../context";
 import avater from "../assets/icons8-avatar-50.png";
 const Navber = () => {
   const { user, logout, profile } = useGlobalHooks();
+  const navigate = useNavigate();
   return (
     <>
       <div className="navbar bg-pink-400 flex justify-between top-0 left-0  fixed shadow-lg z-50">
@@ -46,7 +47,11 @@ const Navber = () => {
               <li>
                 <a>Settings</a>
               </li>
-              <li onClick={logout}>
+              <li
+                onClick={() => {
+                  logout(), navigate("/login");
+                }}
+              >
                 <a>Logout</a>
               </li>
             </ul>
