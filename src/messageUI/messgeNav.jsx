@@ -5,13 +5,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { sender, SenderFullDetails, senderId } from "../utils/config";
 import MessageUi from "./MessageUi";
-import io from "socket.io-client";
 import Loading from "../loader/Loading";
 import { Link } from "react-router-dom";
-const endPoint = "https://chat-up-y7ix.onrender.com/";
-// const endPoint = "http://localhost:5173/";
+import VideoCall from "../p2p/videoCall";
 
-const socket = io(endPoint);
 let copyOfSelectedChat;
 
 const MessgeScreen = () => {
@@ -28,6 +25,7 @@ const MessgeScreen = () => {
     msgLoading,
     setMsgLoading,
     url,
+    socket
   } = useGlobalHooks();
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState("");

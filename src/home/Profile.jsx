@@ -8,8 +8,9 @@ import { useParams } from "react-router-dom";
 import Loading from "../loader/Loading";
 import ProfileModal from "./profileModal";
 import "./home.css";
+import VideoCall from "../p2p/videoCall";
 const UserProfile = () => {
-  const { profile, url } = useGlobalHooks();
+  const { profile, url,callPeer,acceptCall } = useGlobalHooks();
   const [loading, setLoading] = useState(false);
   const [loadingImage, setLoadingImage] = useState(false);
   const [profileFetched, setProfileFetched] = useState([]);
@@ -120,7 +121,11 @@ const UserProfile = () => {
               <p className="text-gray-600 mt-3">
                 {profileFetched?.profile?.email}
               </p>
+              <button onClick={()=>callPeer(id)}>call user</button>
+              <br />
+              <button onClick={acceptCall}>accept call</button>
             </div>
+            <VideoCall/>
           </div>
           <div className="p-4 border-t mt-4">
             <h3 className="text-lg font-semibold text-gray-700">Bio</h3>

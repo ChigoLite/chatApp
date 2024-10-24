@@ -5,17 +5,21 @@ import { useNavigate } from "react-router-dom";
 import SearchUsers from "./searchUsers";
 import MessgeScreen from "../messageUI/messgeNav";
 import "./home.css";
+import IncomingCall from "../p2p/IncomingCall";
+import VideoCall from "../p2p/videoCall";
 const ChatScreen = () => {
   const { loggedIn, selectedChat } = useGlobalHooks();
   const navigate = useNavigate();
   useEffect(() => {
-    console.log(loggedIn);
     if (!loggedIn) {
       navigate("/login");
     }
   }, []);
   return (
     <>
+          <IncomingCall/>
+          <VideoCall/>
+
       <Navber />
       <div className="max-h-screen  overflow-hidden">
         <div className="flex mt-6 ">
