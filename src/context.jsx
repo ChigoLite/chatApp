@@ -13,8 +13,8 @@ import { Peer } from "peerjs";
 import { v4 as uuidv4 } from "uuid";
 const AppContext = createContext();
 
-// const url = "https://chat-up-y7ix.onrender.com/api/v1";
-const url = "http://localhost:2020/api/v1";
+const url = "https://chat-up-y7ix.onrender.com/api/v1";
+// const url = "http://localhost:2020/api/v1";
 
 const Context = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -44,8 +44,8 @@ const Context = ({ children }) => {
 
   const incomingCall = useRef(null);
 
-  // const endPoint = "https://chat-up-y7ix.onrender.com/";
-  const endPoint = "http://localhost:2020/";
+  const endPoint = "https://chat-up-y7ix.onrender.com/";
+  // const endPoint = "http://localhost:2020/";
   const socket = io(endPoint);
 
   useEffect(() => {
