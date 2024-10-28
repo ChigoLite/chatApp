@@ -25,30 +25,17 @@ const MessgeScreen = () => {
     msgLoading,
     setMsgLoading,
     url,
-    socket
+    socket,
+    messages,
+    fetchMessage,
+    setMessages,
   } = useGlobalHooks();
-  const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState("");
   const [typing, setTyping] = useState(false);
   const [typingTimeout, setTypingTimeout] = useState(null);
   const [connection, setConnection] = useState(false);
   const userId = profile?.userProfile?._id;
-  const fetchMessage = async () => {
-    if (!selectedChat) return;
-    setMsgLoading(true);
-    try {
-      const { data } = await axios.get(`${url}/message/${chatId}`, {
-        withCredentials: true,
-      });
-      setMessages(data.messages);
 
-      setMsgLoading(false);
-    } catch (error) {
-      setMsgLoading(false);
-
-      console.error(error);
-    }
-  };
   const sendMessage = async () => {
     if (!messageInput || messageInput.trim() === "") {
       return;
@@ -94,7 +81,6 @@ const MessgeScreen = () => {
 
   useEffect(() => {
     // Function to handle socket setup
-
     const setupSocket = () => {
       socket.emit("onlineUsers", userId);
       socket.on("connection", () => setConnection(true));
@@ -145,13 +131,13 @@ const MessgeScreen = () => {
         setOnlineUser(users);
       });
 
-      socket.on("unreadMessagesCount", (unreadMessages) => {
-        const counts = {};
-        unreadMessages.forEach((chatId) => {
-          counts[chatId] = (counts[chatId] || 0) + 1;
-        });
-        setUnreadCounts(counts);
-      });
+      // socket.on("unreadMessagesCount", (unreadMessages) => {
+      //   const counts = {};
+      //   unreadMessages.forEach((chatId) => {
+      //     counts[chatId] = (counts[chatId] || 0) + 1;
+      //   });
+      //   setUnreadCounts(counts);
+      // });
 
       // Cleanup listeners on component unmount
       return () => {

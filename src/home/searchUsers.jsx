@@ -3,42 +3,19 @@ import { useGlobalHooks } from "../context";
 import Chat from "../chats/ChatPage";
 import axios from "axios";
 import avater from "../assets/icons8-avatar-50.png";
+import { Link } from "react-router-dom";
 
 const SearchUsers = () => {
   const {
     SearchUsers,
     searchedUser,
     skeleton,
-    selectedChat,
-    setSelectedChat,
-    setChatUsers,
-    chatUsers,
-    url,
-    msgLoading,
-    setMsgLoading,
+
+    toggleSearch,
+    setToggleSearch,
   } = useGlobalHooks();
   const [input, setInput] = useState("");
-  const [toggleSearch, setToggleSearch] = useState(false);
-  const accessChat = async (userId) => {
-    setMsgLoading(true);
-    try {
-      const { data } = await axios.post(
-        `${url}/chat`,
-        { userId },
-        { withCredentials: true }
-      );
-      if (!chatUsers.find((user) => user._id === data._id)) {
-        setChatUsers([data, ...chatUsers]);
-        setToggleSearch(false);
-        setSelectedChat(data);
-        setMsgLoading(false);
-        setInput("");
-      }
-    } catch (error) {
-      setMsgLoading(false);
-      console.log(error);
-    }
-  };
+
   const handleSearch = () => {
     let timeoutId;
     return (e) => {
@@ -59,6 +36,7 @@ const SearchUsers = () => {
       setToggleSearch(false);
     }
   }, [input]);
+
   const debounce = useMemo(() => handleSearch(), []);
   return (
     <div className=" mt-16 h-full">
@@ -94,32 +72,33 @@ const SearchUsers = () => {
                   {skeleton ? (
                     <div className="skeleton h-12 w-full"></div>
                   ) : (
-                    <div
-                      className="btn flex justify-between w-full bg-pink-50 h-8"
-                      onClick={() => accessChat(users._id)}
-                    >
-                      <div className="">
-                        <h3 className="  capitalize">{users.username}</h3>
-                        <span className=" text-sm text-gray-950">
-                          {users.email}
-                        </span>
-                      </div>
-                      <div className="">
-                        {users.image ? (
-                          <img
-                            className="w-8 h-8 object-contain"
-                            src={users.image}
-                            alt={users.name}
-                          />
-                        ) : (
-                          <img
-                            className="w-8 h-8 object-contain"
-                            src={avater}
-                            alt={users.profile}
-                          />
-                        )}
-                      </div>
-                    </div>
+                    <>
+                      <Link to={`/profile/${users._id}`}>
+                        <div className="btn flex justify-between w-full bg-pink-50 h-8">
+                          <div className="">
+                            <h3 className="  capitalize">{users.username}</h3>
+                            <span className=" text-sm text-gray-950">
+                              {users.email}
+                            </span>
+                          </div>
+                          <div className="">
+                            {users.image ? (
+                              <img
+                                className="w-8 h-8 rounded-full object-contain"
+                                src={users.image}
+                                alt={users.name}
+                              />
+                            ) : (
+                              <img
+                                className="w-8 h-8 rounded-full object-contain"
+                                src={avater}
+                                alt={users.profile}
+                              />
+                            )}
+                          </div>
+                        </div>
+                      </Link>
+                    </>
                   )}
                 </div>
               </div>

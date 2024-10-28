@@ -8,17 +8,20 @@ import "./home.css";
 import IncomingCall from "../p2p/IncomingCall";
 import VideoCall from "../p2p/videoCall";
 const ChatScreen = () => {
-  const { loggedIn, selectedChat } = useGlobalHooks();
+  const { loggedIn, selectedChat, fetchMessage, chatUsers } = useGlobalHooks();
   const navigate = useNavigate();
   useEffect(() => {
     if (!loggedIn) {
       navigate("/login");
     }
   }, []);
+  useEffect(() => {
+    fetchMessage();
+  }, []);
   return (
     <>
-          <IncomingCall/>
-          <VideoCall/>
+      <IncomingCall />
+      <VideoCall />
 
       <Navber />
       <div className="max-h-screen  overflow-hidden">

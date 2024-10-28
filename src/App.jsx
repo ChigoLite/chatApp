@@ -15,7 +15,6 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         {/* <Route path="/chat" element={<ChatScreen />} /> */}
         <Route path="/profile/:id" element={<UserProfile />} />
-        <Route path="/profile/call" element={<VideoCall />}/>
       </Routes>
     </Suspense>
   );

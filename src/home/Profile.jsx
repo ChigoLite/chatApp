@@ -10,7 +10,7 @@ import ProfileModal from "./profileModal";
 import "./home.css";
 import VideoCall from "../p2p/videoCall";
 const UserProfile = () => {
-  const { profile, url,callPeer,acceptCall } = useGlobalHooks();
+  const { profile, url, callPeer, accessChat } = useGlobalHooks();
   const [loading, setLoading] = useState(false);
   const [loadingImage, setLoadingImage] = useState(false);
   const [profileFetched, setProfileFetched] = useState([]);
@@ -121,11 +121,17 @@ const UserProfile = () => {
               <p className="text-gray-600 mt-3">
                 {profileFetched?.profile?.email}
               </p>
-              <button onClick={()=>callPeer(id)}>call user</button>
-              <br />
-              <button onClick={acceptCall}>accept call</button>
             </div>
-            <VideoCall/>
+            <VideoCall />
+          </div>
+          <div className="flex justify-evenly ">
+            <button onClick={() => accessChat(id)} className="btn btn-primary">
+              Message
+            </button>
+
+            <button onClick={() => callPeer(id)} className="btn btn-secondary">
+              Call
+            </button>
           </div>
           <div className="p-4 border-t mt-4">
             <h3 className="text-lg font-semibold text-gray-700">Bio</h3>
